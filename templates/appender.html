@@ -1,0 +1,98 @@
+<!--templates/appender.html-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Data Appender</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div id="drawerBackdrop" class="drawer-backdrop hidden"></div>
+  <aside id="drawer" class="drawer">
+    <div class="drawer-head">
+      <div>
+        <div class="drawer-title">Navigation</div>
+        <div class="subtext">Tools and settings</div>
+      </div>
+      <button id="drawerClose" class="icon-btn" type="button">×</button>
+    </div>
+    <nav class="drawer-nav">
+      <a class="drawer-link" href="/">Sampler</a>
+      <a class="drawer-link active" href="/appender">Data Appender</a>
+      <a class="drawer-link" href="/admin">Admin</a>
+    </nav>
+    <div class="drawer-section">
+      <div class="drawer-label">Current User</div>
+      <div class="subtext">Shared across all pages</div>
+      <select id="userSelect"></select>
+    </div>
+  </aside>
+
+  <div class="page">
+    <header class="header">
+      <div class="header-inner">
+          <button id="drawerToggle" class="hamburger-btn" type="button">☰</button>
+          <h1 class="page-title">Data Appender</h1>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <div class="card-head">
+          <h2>Append Excel / CSV Files</h2>
+          <div class="subtext">Upload 2 or more files. Manual order is supported and conditional sorting uses options from Admin.</div>
+        </div>
+
+        <div class="appender-toolbar">
+          <input id="appendFiles" type="file" accept=".csv,.xlsx,.xls" multiple hidden>
+          <button id="addFilesBtn" class="btn primary" type="button">Add Files</button>
+          <button id="clearFilesBtn" class="btn" type="button">Clear</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head tight">
+          <h2>Sorting</h2>
+          <div class="subtext">Manual keeps your file order. Conditional sorts by a configured rule.</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Sort mode</label>
+            <select id="sortMode">
+              <option value="manual">Manual</option>
+              <option value="conditional">Conditional</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Condition</label>
+            <select id="sortCondition"></select>
+          </div>
+          <div class="field">
+            <label>Direction</label>
+            <select id="sortDirection">
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head tight">
+          <h2>Selected Files</h2>
+          <div class="subtext" id="appendInfo">No files selected yet.</div>
+        </div>
+        <div id="appendFileList" class="append-file-list"></div>
+        <div class="actions">
+          <button id="appendDownloadBtn" class="btn primary" type="button">Append &amp; Download</button>
+          <span id="appendMsg" class="subtext"></span>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='appender.js') }}"></script>
+</body>
+</html>

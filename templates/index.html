@@ -1,0 +1,134 @@
+<!--templates/index.html-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sampling Tool</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='modal.css') }}">
+</head>
+<body>
+  <div id="drawerBackdrop" class="drawer-backdrop hidden"></div>
+  <aside id="drawer" class="drawer">
+    <div class="drawer-head">
+      <div>
+        <div class="drawer-title">Navigation</div>
+        <div class="subtext">Tools and settings</div>
+      </div>
+      <button id="drawerClose" class="icon-btn" type="button">×</button>
+    </div>
+
+    <nav class="drawer-nav">
+      <a class="drawer-link active" href="/">Sampler</a>
+      <a class="drawer-link" href="/appender">Data Appender</a>
+      <a class="drawer-link" href="/admin">Admin</a>
+    </nav>
+
+    <div class="drawer-section">
+      <div class="drawer-label">Current User</div>
+      <select id="userSelect"></select>
+    </div>
+  </aside>
+
+  <div class="page">
+    <header class="header">
+      <div class="header-inner">
+        <button id="drawerToggle" class="hamburger-btn" type="button">☰</button>
+        <h1 class="page-title">Sampling Tool</h1>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Upload Dataset -->
+      <section class="card">
+        <div class="card-head">
+          <h2>Upload Dataset</h2>
+          <div class="subtext" id="datasetInfo">No dataset loaded yet.</div>
+        </div>
+        <div class="upload-center">
+          <input id="fileInput" type="file" accept=".csv,.xlsx,.xls" hidden>
+          <button id="uploadBtn" class="btn primary">Upload</button>
+        </div>
+      </section>
+
+      <!-- Conditional Filtering -->
+      <section class="card" id="conditionalFilterCard">
+        <div class="card-head">
+          <h2>Conditional Filtering</h2>
+          <div class="subtext">Global filters applied to the entire dataset (configured in Admin)</div>
+        </div>
+        <div id="conditionalFiltersList" class="rules"></div>
+        <div id="filteredCount" class="subtext" style="margin-top:10px; font-weight:700;"></div>
+        <div class="subtext" style="margin-top:8px;">
+          <a href="/admin" style="color:#2563eb;">Edit filters in Admin →</a>
+        </div>
+      </section>
+
+      <!-- Manual Sampler -->
+      <section class="card">
+        <div class="card-head">
+          <h2>Manual Sampler</h2>
+          <div class="subtext">Select sampling depth from available levels.</div>
+        </div>
+
+        <div class="profile-bar">
+          <div class="profile-left">
+            <span class="subtext" style="font-weight:900;">Profile:</span>
+            <div class="profile-combo">
+              <input id="profileSearch" class="profile-input" type="text" placeholder="Search or type profile name..." autocomplete="off">
+              <button id="profileUpdateBtn" class="profile-update-btn" type="button" title="Update current profile">↻</button>
+              <div id="profileResults" class="profile-results hidden"></div>
+            </div>
+            <span id="profileMsg" class="subtext"></span>
+          </div>
+
+          <div class="profile-right">
+            <div class="search-wrap">
+              <input id="quickSearch" type="text" placeholder="Search" class="search-input">
+              <div id="searchResults" class="search-results hidden"></div>
+            </div>
+            <button id="resetFiltersBtn" class="btn">Reset</button>
+          </div>
+        </div>
+
+        <div class="depth-row">
+          <div class="depth-label">Depth</div>
+          <div id="depthButtons" class="pills"></div>
+        </div>
+
+        <div id="cards" class="grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Testing Modal -->
+  <div id="testingModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <div class="modal-title">Before Download</div>
+          <div class="modal-sub">Is this sample for testing?</div>
+        </div>
+        <button id="tmClose" class="icon-btn" type="button">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="choice-grid">
+          <button id="tmTesting" type="button" class="choice">
+            <div class="choice-title">Testing</div>
+            <div class="choice-desc">Download only (will NOT append to uuid.csv)</div>
+          </button>
+          <button id="tmSampling" type="button" class="choice primary">
+            <div class="choice-title">Sampling</div>
+            <div class="choice-desc">Download + append to uuid.csv</div>
+          </button>
+        </div>
+        <div class="modal-hint">You can disable this popup from the Admin page.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

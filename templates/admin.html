@@ -1,0 +1,117 @@
+<!--templates/admin.html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="admin-body">
+    {% include "icons.svg" %}
+  <header class="admin-topbar">
+    <h1 class="admin-page-title">Admin</h1>
+
+    <a href="/" class="admin-back-btn">
+      <span class="admin-back-icon">←</span>
+      <span>Back to Tool</span>
+    </a>
+  </header>
+
+  <main class="admin-shell">
+    <section class="admin-card admin-config-card">
+      <div class="admin-card-head">
+        <div class="admin-card-bar"></div>
+        <div>
+          <h2>Dynamic Configuration</h2>
+          <p>Controls levels, defaults, masks, and users</p>
+        </div>
+      </div>
+
+      <div class="admin-form-grid">
+        <div class="admin-field">
+          <label for="uuidColumn">UUID Column</label>
+          <input id="uuidColumn" type="text">
+        </div>
+
+        <div class="admin-field">
+          <label for="levelsInput">Available Levels (Comma separated)</label>
+          <input id="levelsInput" type="text">
+        </div>
+
+        <div class="admin-field">
+          <label for="defaultMinCount">Default Min Count</label>
+          <input id="defaultMinCount" type="number">
+        </div>
+
+        <div class="admin-field">
+          <label for="defaultSampleCount">Default Sampler Count</label>
+          <input id="defaultSampleCount" type="number">
+        </div>
+
+        <div class="admin-field">
+          <label for="usersInput">Users</label>
+          <small>(Comma separated)</small>
+          <input id="usersInput" type="text">
+        </div>
+
+        <div class="admin-field">
+          <label for="defaultUser">Default Users</label>
+          <input id="defaultUser" type="text">
+        </div>
+      </div>
+
+      <div class="admin-toggle-row">
+        <div class="admin-toggle-text">
+          <h3>Show “Testing vs Sampling” popup before download</h3>
+        </div>
+
+        <label class="admin-switch">
+          <input id="showModePopup" type="checkbox">
+          <span class="admin-slider"></span>
+        </label>
+      </div>
+    </section>
+
+    <section class="admin-card admin-mask-card">
+      <p class="admin-section-caption">Filters Applied before preview/download</p>
+
+      <div class="admin-mask-title-row">
+        <div class="admin-mask-title-left">
+          <span class="admin-filter-icon">⛃</span>
+          <h3>Mask Rules (AND)</h3>
+        </div>
+
+        <button type="button" id="addMaskRuleBtn" class="admin-add-rule-btn">+</button>
+      </div>
+
+      <!-- KEEP THIS ID SAME AS YOUR CURRENT WORKING PAGE -->
+      <div id="maskRulesContainer" class="admin-rules-wrap">
+        <div class="admin-empty-rules" id="emptyRulesState">
+          No rules added yet, click “+” add rule to get started
+        </div>
+      </div>
+
+      <div class="admin-bottom-row">
+        <div class="admin-columns-info">
+          <span>Dataset Columns (if uploaded):</span>
+          <strong id="datasetColumnsText">None loaded</strong>
+        </div>
+
+        <!-- KEEP THIS BUTTON ID SAME AS YOUR CURRENT WORKING PAGE -->
+              <button id="saveConfigBtn" class="admin-save-btn">
+                <svg class="icon" aria-hidden="true">
+                  <use href="#icon-save"></use>
+                </svg>
+                <span>Save Changes</span>
+              </button>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='admin.js') }}"></script>
+</body>
+</html>

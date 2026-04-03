@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "Jamshoro": {
+      "depth_levels": [
+        "DISTRICT"
+      ],
+      "selected": {
+        "DISTRICT": [
+          "Dadu"
+        ]
+      },
+      "min_count": 50,
+      "sample_count": 50,
+      "quota": {
+        "Dadu": 50
+      },
+      "added_by": "Shumail Mehmood"
+    },
+    "Dadu": {
+      "depth_levels": [
+        "DISTRICT",
+        "TEHSIL",
+        "UC",
+        "Deh",
+        "Village"
+      ],
+      "selected": {
+        "DISTRICT": [
+          "Dadu"
+        ],
+        "TEHSIL": [
+          "Dadu||Khairpur Nathan Shah",
+          "Khairpur Nathan Shah"
+        ],
+        "UC": [
+          "Fatehpur"
+        ],
+        "Deh": [
+          "Bawan"
+        ]
+      },
+      "min_count": 1,
+      "sample_count": 1,
+      "quota": {},
+      "added_by": "Shumail Mehmood"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "dataset": {
+    "uuid_col": "uuid"
+  },
+  "levels": [
+    "DISTRICT",
+    "TEHSIL",
+    "UC",
+    "Deh",
+    "Village"
+  ],
+  "defaults": {
+    "min_count": 1,
+    "sample_count": 1
+  },
+  "mask_rules": [
+    {
+      "col": "Plinth Status",
+      "op": "ncontains",
+      "values": [
+        "NOT_APPROVED_BY_SPHF"
+      ]
+    }
+  ],
+  "users": [
+    "Shumail Mehmood",
+    "Rizwan Saleem"
+  ],
+  "default_user": "Shumail Mehmood",
+  "testing_prompt_enabled": true,
+  "appender": {
+    "sort_conditions": [
+      "filename"
+    ],
+    "default_sort_condition": "filename",
+    "sheet_name": "AppendedData"
+  }
+}
