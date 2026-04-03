@@ -1,0 +1,218 @@
+<!--templates/autosampler.html-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Auto Sampler</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='autosampler.css') }}">
+</head>
+<body>
+<div id="drawerBackdrop" class="drawer-backdrop hidden"></div>
+<aside id="drawer" class="drawer">
+  <div class="drawer-head">
+    <div><div class="drawer-title">Navigation</div><div class="subtext">Tools and settings</div></div>
+    <button id="drawerClose" class="icon-btn" type="button">&times;</button>
+  </div>
+  <nav class="drawer-nav">
+    <a class="drawer-link" href="/">Sampler</a>
+    <a class="drawer-link" href="/appender">Data Appender</a>
+    <a class="drawer-link" href="/cochran">Cochran Calculator</a>
+    <a class="drawer-link active" href="/autosampler">Auto Sampler</a>
+    <a class="drawer-link" href="/admin">Admin</a>
+  </nav>
+</aside>
+
+<div class="page">
+  <header class="header">
+    <div class="header-inner">
+      <button id="drawerToggle" class="hamburger-btn" type="button">&#9776;</button>
+      <h1 class="page-title">Auto Sampler</h1>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Step 1: Upload Dataset -->
+    <section class="card as-step-card">
+      <div class="as-step-head">
+        <div class="as-step-badge">1</div>
+        <div>
+          <h2>Upload Dataset</h2>
+          <div class="subtext">CSV or Excel file — columns will be auto-detected</div>
+        </div>
+      </div>
+      <div class="as-upload-row">
+        <input id="asFileInput" type="file" accept=".csv,.xlsx,.xls" hidden>
+        <button id="asUploadBtn" class="btn primary" type="button">Choose File</button>
+        <span id="asFileInfo" class="subtext">No file selected</span>
+      </div>
+      <div id="asColumnsWrap" class="as-columns-wrap hidden">
+        <div class="as-columns-label">Detected columns:</div>
+        <div id="asColumnsList" class="as-columns-list"></div>
+      </div>
+    </section>
+
+    <!-- Step 2: Cochran Parameters -->
+    <section class="card as-step-card">
+      <div class="as-step-head">
+        <div class="as-step-badge">2</div>
+        <div>
+          <h2>Cochran Parameters</h2>
+          <div class="subtext">Used to compute the required sample size n</div>
+        </div>
+      </div>
+      <div class="as-params-grid">
+        <div class="as-field">
+          <label>Z — Confidence Level</label>
+          <div class="as-preset-row">
+            <button class="as-preset" data-field="z" data-value="1.645">90%</button>
+            <button class="as-preset active" data-field="z" data-value="1.96">95%</button>
+            <button class="as-preset" data-field="z" data-value="2.576">99%</button>
+          </div>
+          <input id="cochranZ" class="as-input" type="number" step="0.001" value="1.96" placeholder="Z-score">
+        </div>
+        <div class="as-field">
+          <label>p — Proportion</label>
+          <div class="as-preset-row">
+            <button class="as-preset" data-field="p" data-value="0.1">10%</button>
+            <button class="as-preset" data-field="p" data-value="0.3">30%</button>
+            <button class="as-preset active" data-field="p" data-value="0.5">50%</button>
+          </div>
+          <input id="cochranP" class="as-input" type="number" step="0.01" min="0" max="1" value="0.5" placeholder="0 to 1">
+        </div>
+        <div class="as-field">
+          <label>e — Margin of Error</label>
+          <div class="as-preset-row">
+            <button class="as-preset" data-field="e" data-value="0.01">1%</button>
+            <button class="as-preset active" data-field="e" data-value="0.05">5%</button>
+            <button class="as-preset" data-field="e" data-value="0.1">10%</button>
+          </div>
+          <input id="cochranE" class="as-input" type="number" step="0.001" min="0.001" max="1" value="0.05" placeholder="0 to 1">
+        </div>
+        <div class="as-field">
+          <label>N — Population Size</label>
+          <div class="subtext" style="margin-bottom:6px">Leave blank to use dataset row count</div>
+          <input id="cochranN" class="as-input" type="number" min="1" placeholder="Auto from file">
+        </div>
+      </div>
+      <div id="cochranResult" class="as-cochran-result hidden">
+        <span class="as-cochran-n0">n<sub>0</sub> = <strong id="crN0">—</strong></span>
+        <span class="as-cochran-arrow" id="crArrow" style="display:none">→</span>
+        <span class="as-cochran-nf" id="crNfWrap" style="display:none">n = <strong id="crNf">—</strong></span>
+        <span class="as-cochran-label" id="crLabel"></span>
+      </div>
+    </section>
+
+    <!-- Step 3: Sampling Method -->
+    <section class="card as-step-card">
+      <div class="as-step-head">
+        <div class="as-step-badge">3</div>
+        <div>
+          <h2>Sampling Method</h2>
+          <div class="subtext">Choose how samples are selected from the population</div>
+        </div>
+      </div>
+
+      <div class="as-method-tabs">
+        <button class="as-method-tab active" data-method="simple_random">&#127922; Simple Random</button>
+        <button class="as-method-tab" data-method="stratified">&#128202; Stratified</button>
+        <button class="as-method-tab" data-method="cluster">&#128506; Cluster</button>
+        <button class="as-method-tab" data-method="systematic">&#128203; Systematic</button>
+      </div>
+
+      <!-- Simple Random -->
+      <div id="pane-simple_random" class="as-method-pane">
+        <div class="as-method-desc">Randomly selects n rows from the entire dataset with equal probability. No configuration needed.</div>
+      </div>
+
+      <!-- Stratified -->
+      <div id="pane-stratified" class="as-method-pane hidden">
+        <div class="as-method-desc">Divide population into groups and sample proportionally. Each group gets a share of n based on your % allocation.</div>
+        <div id="strataBuilder">
+          <div class="as-strata-head">
+            <span>Column</span><span>Value</span><span>% of sample</span><span></span>
+          </div>
+          <div id="strataRows"></div>
+          <button id="addStrataGroupBtn" class="btn" type="button" style="margin-top:8px">+ Add Group</button>
+          <div class="subtext" style="margin-top:6px">Percentages across all groups should sum to 100%.</div>
+          <div id="strataPctCheck" class="as-pct-check"></div>
+        </div>
+      </div>
+
+      <!-- Cluster -->
+      <div id="pane-cluster" class="as-method-pane hidden">
+        <div class="as-method-desc">Randomly selects clusters (groups) then samples within them. Good for geographically spread populations.</div>
+        <div class="as-params-grid" style="margin-top:10px">
+          <div class="as-field">
+            <label>Cluster Column</label>
+            <select id="clusterCol" class="as-input as-select">
+              <option value="">— Upload file first —</option>
+            </select>
+          </div>
+          <div class="as-field">
+            <label>Number of Clusters</label>
+            <div class="subtext" style="margin-bottom:4px">Leave blank to auto-calculate</div>
+            <input id="nClusters" class="as-input" type="number" min="1" placeholder="Auto">
+          </div>
+        </div>
+      </div>
+
+      <!-- Systematic -->
+      <div id="pane-systematic" class="as-method-pane hidden">
+        <div class="as-method-desc">Selects every k-th individual from an ordered list. Interval k is computed automatically as N/n.</div>
+        <div id="systematicInfo" class="as-sys-info hidden">
+          Interval k = <strong id="sysK">—</strong> &nbsp;·&nbsp; Starting from a random point between 1 and k
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 4: Run Options -->
+    <section class="card as-step-card">
+      <div class="as-step-head">
+        <div class="as-step-badge">4</div>
+        <div>
+          <h2>Run Options</h2>
+          <div class="subtext">Final settings before running</div>
+        </div>
+      </div>
+      <div class="as-params-grid">
+        <div class="as-field">
+          <label>UUID / ID Column</label>
+          <div class="subtext" style="margin-bottom:4px">For audit log record list</div>
+          <select id="uuidCol" class="as-input as-select">
+            <option value="">— None —</option>
+          </select>
+        </div>
+        <div class="as-field">
+          <label>Run By (User)</label>
+          <input id="runBy" class="as-input" type="text" placeholder="Your name">
+        </div>
+        <div class="as-field">
+          <label>Output Format</label>
+          <div class="as-toggle-row">
+            <button class="as-fmt-btn active" data-fmt="xlsx">Excel (.xlsx)</button>
+            <button class="as-fmt-btn" data-fmt="csv">CSV</button>
+          </div>
+        </div>
+        <div class="as-field">
+          <label>Random Seed</label>
+          <div class="subtext" style="margin-bottom:4px">For reproducibility</div>
+          <input id="randomSeed" class="as-input" type="number" value="42" min="0">
+        </div>
+      </div>
+    </section>
+
+    <!-- Run Button -->
+    <div class="as-run-row">
+      <button id="asRunBtn" class="btn primary as-run-btn" type="button">&#9654; Run Sampling</button>
+      <div id="asRunStatus" class="as-run-status"></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="{{ url_for('static', filename='autosampler.js') }}"></script>
+</body>
+</html>

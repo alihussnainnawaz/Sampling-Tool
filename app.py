@@ -3,6 +3,8 @@ from routes.main import main_bp
 from routes.admin import admin_bp
 from routes.api import api_bp
 from routes.cochran_route import cochran_bp
+from routes.autosampler_page import autosampler_bp_page
+from routes.auto_sampler_api import autosampler_bp
 
 def create_app():
     app = Flask(__name__)
@@ -10,6 +12,9 @@ def create_app():
     app.register_blueprint(admin_bp)
     app.register_blueprint(api_bp, url_prefix="/api")
     app.register_blueprint(cochran_bp)
+    app.register_blueprint(autosampler_bp_page)
+    app.register_blueprint(autosampler_bp)
+
     return app
 
 app = create_app()

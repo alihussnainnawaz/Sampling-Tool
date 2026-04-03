@@ -12,11 +12,8 @@
   <div id="drawerBackdrop" class="drawer-backdrop hidden"></div>
   <aside id="drawer" class="drawer">
     <div class="drawer-head">
-      <div>
-        <div class="drawer-title">Navigation</div>
-        <div class="subtext">Tools and settings</div>
-      </div>
-      <button id="drawerClose" class="icon-btn" type="button">×</button>
+      <div><div class="drawer-title">Navigation</div><div class="subtext">Tools and settings</div></div>
+      <button id="drawerClose" class="icon-btn" type="button">&times;</button>
     </div>
     <nav class="drawer-nav">
       <a class="drawer-link" href="/">Sampler</a>
@@ -29,7 +26,7 @@
   <div class="page">
     <header class="header">
       <div class="header-inner">
-        <button id="drawerToggle" class="hamburger-btn" type="button">☰</button>
+        <button id="drawerToggle" class="hamburger-btn" type="button">&#9776;</button>
         <h1 class="page-title">Cochran Calculator</h1>
       </div>
     </header>
@@ -55,16 +52,14 @@
         </div>
       </section>
 
-      <!-- Main layout -->
+      <!-- STEP 1: Cochran Parameters + Result -->
       <div class="cochran-main-layout">
 
-        <!-- Left: Parameters -->
         <section class="card cochran-params-card">
           <div class="card-head tight">
             <h2>Parameters</h2>
             <div class="subtext">Adjust values then click Calculate</div>
           </div>
-
           <div class="cochran-param-list">
 
             <!-- Z -->
@@ -138,11 +133,9 @@
                   <button class="cochran-n-tab active" data-tab="manual">Manual</button>
                   <button class="cochran-n-tab" data-tab="file">From File</button>
                 </div>
-
                 <div id="nTabManual" class="cochran-n-pane">
                   <input id="paramN" class="cochran-input" type="number" min="1" step="1" placeholder="Leave blank to skip">
                 </div>
-
                 <div id="nTabFile" class="cochran-n-pane hidden">
                   <input id="nFileInput" type="file" accept=".csv,.xlsx,.xls" hidden>
                   <div id="nFileDrop" class="cochran-file-drop">
@@ -159,14 +152,13 @@
             </div>
 
           </div>
-
           <div class="cochran-calc-row">
             <button id="calcBtn" class="btn primary cochran-calc-btn" type="button">Calculate</button>
             <span id="calcMsg" class="subtext"></span>
           </div>
         </section>
 
-        <!-- Right: Result -->
+        <!-- Result Card -->
         <section class="card cochran-result-card" id="resultCard">
           <div class="cochran-result-label">Required Sample Size</div>
           <div class="cochran-result-numbers" id="resultNumbers">
@@ -177,9 +169,136 @@
           <div class="cochran-result-breakdown" id="resultBreakdown">
             <div class="subtext" style="padding:8px 0">No result yet.</div>
           </div>
+          <div id="samplingMethodRow" class="sg-open-row hidden">
+            <button id="openSamplingBtn" class="btn primary sg-open-btn" type="button">&#128202; Now Sample These People</button>
+          </div>
         </section>
 
       </div>
+
+      <!-- Method Picker Modal -->
+      <div id="samplingModal" class="sm-backdrop hidden">
+        <div class="sm-modal">
+          <div class="sm-modal-head">
+            <div>
+              <div class="sm-modal-title">Choose a Sampling Method</div>
+              <div class="sm-modal-sub">Required sample size: <strong id="smN">&mdash;</strong></div>
+            </div>
+            <button id="smClose" class="icon-btn" type="button">&times;</button>
+          </div>
+          <div class="sm-methods">
+            <button class="sm-method-btn" data-method="simple_random">
+              <div class="sm-method-icon">&#127922;</div>
+              <div class="sm-method-body">
+                <div class="sm-method-title">Simple Random</div>
+                <div class="sm-method-desc">Randomly pick n rows. Equal chance for everyone.</div>
+              </div>
+              <div class="sm-method-arrow">&rarr;</div>
+            </button>
+            <button class="sm-method-btn sm-recommended" data-method="stratified">
+              <div class="sm-method-icon">&#128202;</div>
+              <div class="sm-method-body">
+                <div class="sm-method-title">Stratified <span class="sm-badge">Recommended</span></div>
+                <div class="sm-method-desc">Define groups (e.g. 60% male, 40% female) and sample each proportionally.</div>
+              </div>
+              <div class="sm-method-arrow">&rarr;</div>
+            </button>
+            <button class="sm-method-btn" data-method="cluster">
+              <div class="sm-method-icon">&#128506;</div>
+              <div class="sm-method-body">
+                <div class="sm-method-title">Cluster</div>
+                <div class="sm-method-desc">Randomly select clusters (districts, schools) then sample within them.</div>
+              </div>
+              <div class="sm-method-arrow">&rarr;</div>
+            </button>
+            <button class="sm-method-btn" data-method="systematic">
+              <div class="sm-method-icon">&#128203;</div>
+              <div class="sm-method-body">
+                <div class="sm-method-title">Systematic (Interval)</div>
+                <div class="sm-method-desc">Pick every k-th person from an ordered list.</div>
+              </div>
+              <div class="sm-method-arrow">&rarr;</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Sampling Engine (appears after method selected) -->
+      <section class="card sg-engine-card hidden" id="sgEngineCard">
+
+        <!-- Engine Header -->
+        <div class="sg-engine-head">
+          <div class="sg-engine-head-left">
+            <span class="sg-engine-icon" id="sgIcon"></span>
+            <div>
+              <div class="sg-engine-title" id="sgTitle"></div>
+              <div class="subtext">n = <strong id="sgN">—</strong></div>
+            </div>
+          </div>
+          <button class="btn sg-change-btn" id="sgChangeBtn" type="button">Change Method</button>
+        </div>
+
+        <div class="sg-engine-divider"></div>
+
+        <!-- Upload dataset for sampling -->
+        <div class="sg-section">
+          <div class="sg-section-title">Upload Dataset</div>
+          <div class="sg-upload-row">
+            <input id="sgFileInput" type="file" accept=".csv,.xlsx,.xls" hidden>
+            <button id="sgUploadBtn" class="btn primary" type="button">Choose File</button>
+            <span id="sgFileInfo" class="subtext">No file selected</span>
+          </div>
+          <div id="sgColumnsWrap" class="sg-columns-wrap hidden">
+            <div id="sgColumnsList" class="sg-columns-list"></div>
+          </div>
+        </div>
+
+        <div class="sg-engine-divider"></div>
+
+        <!-- Method-specific params -->
+        <div class="sg-section" id="sgMethodParams">
+          <!-- filled by JS -->
+        </div>
+
+        <div class="sg-engine-divider"></div>
+
+        <!-- Run options -->
+        <div class="sg-section">
+          <div class="sg-section-title">Run Options</div>
+          <div class="sg-run-options-grid">
+            <div class="sg-field">
+              <label>UUID / ID Column <span class="subtext">(for audit log)</span></label>
+              <select id="sgUuidCol" class="sg-input sg-select">
+                <option value="">— None —</option>
+              </select>
+            </div>
+            <div class="sg-field">
+              <label>Run By</label>
+              <input id="sgRunBy" class="sg-input" type="text" placeholder="Your name">
+            </div>
+            <div class="sg-field">
+              <label>Output Format</label>
+              <div class="sg-fmt-row">
+                <button class="sg-fmt-btn active" data-fmt="xlsx">Excel (.xlsx)</button>
+                <button class="sg-fmt-btn" data-fmt="csv">CSV</button>
+              </div>
+            </div>
+            <div class="sg-field">
+              <label>Random Seed</label>
+              <input id="sgSeed" class="sg-input" type="number" value="42" min="0">
+            </div>
+          </div>
+        </div>
+
+        <div class="sg-engine-divider"></div>
+
+        <!-- Run button -->
+        <div class="sg-run-row">
+          <button id="sgRunBtn" class="btn primary sg-run-btn" type="button">&#9654; Run &amp; Download</button>
+          <div id="sgRunStatus" class="sg-run-status"></div>
+        </div>
+
+      </section>
 
     </main>
   </div>
