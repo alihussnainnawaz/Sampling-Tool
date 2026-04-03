@@ -1,0 +1,189 @@
+<!--templates/cochran.html-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cochran Calculator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='cochran.css') }}">
+</head>
+<body>
+  <div id="drawerBackdrop" class="drawer-backdrop hidden"></div>
+  <aside id="drawer" class="drawer">
+    <div class="drawer-head">
+      <div>
+        <div class="drawer-title">Navigation</div>
+        <div class="subtext">Tools and settings</div>
+      </div>
+      <button id="drawerClose" class="icon-btn" type="button">×</button>
+    </div>
+    <nav class="drawer-nav">
+      <a class="drawer-link" href="/">Sampler</a>
+      <a class="drawer-link" href="/appender">Data Appender</a>
+      <a class="drawer-link active" href="/cochran">Cochran Calculator</a>
+      <a class="drawer-link" href="/admin">Admin</a>
+    </nav>
+  </aside>
+
+  <div class="page">
+    <header class="header">
+      <div class="header-inner">
+        <button id="drawerToggle" class="hamburger-btn" type="button">☰</button>
+        <h1 class="page-title">Cochran Calculator</h1>
+      </div>
+    </header>
+
+    <main class="container">
+
+      <!-- Formula Banner -->
+      <section class="card cochran-formula-card">
+        <div class="cochran-formula-wrap">
+          <div class="cochran-formula-block">
+            <div class="cochran-formula-label">Base Formula</div>
+            <div class="cochran-formula">
+              n<sub>0</sub> = <span class="frac"><span class="num">Z&#178; &middot; p &middot; (1&minus;p)</span><span class="den">e&#178;</span></span>
+            </div>
+          </div>
+          <div class="cochran-formula-divider"></div>
+          <div class="cochran-formula-block">
+            <div class="cochran-formula-label">With Finite Correction</div>
+            <div class="cochran-formula">
+              n = <span class="frac"><span class="num">n<sub>0</sub></span><span class="den">1 + (n<sub>0</sub>&minus;1) / N</span></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main layout -->
+      <div class="cochran-main-layout">
+
+        <!-- Left: Parameters -->
+        <section class="card cochran-params-card">
+          <div class="card-head tight">
+            <h2>Parameters</h2>
+            <div class="subtext">Adjust values then click Calculate</div>
+          </div>
+
+          <div class="cochran-param-list">
+
+            <!-- Z -->
+            <div class="cochran-param-row">
+              <div class="cochran-param-left">
+                <div class="cochran-param-symbol">Z</div>
+                <div class="cochran-param-info">
+                  <div class="cochran-param-title">Confidence Level</div>
+                  <div class="cochran-param-hint">1.645=90% &middot; 1.96=95% &middot; 2.576=99%</div>
+                </div>
+              </div>
+              <div class="cochran-param-right">
+                <div class="cochran-preset-row">
+                  <button class="cochran-preset" data-param="z" data-value="1.645">90%</button>
+                  <button class="cochran-preset active" data-param="z" data-value="1.96">95%</button>
+                  <button class="cochran-preset" data-param="z" data-value="2.576">99%</button>
+                </div>
+                <input id="paramZ" class="cochran-input" type="number" step="0.001" min="0" value="1.96" placeholder="Z-score">
+              </div>
+            </div>
+
+            <!-- p -->
+            <div class="cochran-param-row">
+              <div class="cochran-param-left">
+                <div class="cochran-param-symbol">p</div>
+                <div class="cochran-param-info">
+                  <div class="cochran-param-title">Estimated Proportion</div>
+                  <div class="cochran-param-hint">Use 0.5 for most conservative estimate</div>
+                </div>
+              </div>
+              <div class="cochran-param-right">
+                <div class="cochran-preset-row">
+                  <button class="cochran-preset" data-param="p" data-value="0.1">10%</button>
+                  <button class="cochran-preset" data-param="p" data-value="0.3">30%</button>
+                  <button class="cochran-preset active" data-param="p" data-value="0.5">50%</button>
+                </div>
+                <input id="paramP" class="cochran-input" type="number" step="0.01" min="0" max="1" value="0.5" placeholder="0 to 1">
+              </div>
+            </div>
+
+            <!-- e -->
+            <div class="cochran-param-row">
+              <div class="cochran-param-left">
+                <div class="cochran-param-symbol">e</div>
+                <div class="cochran-param-info">
+                  <div class="cochran-param-title">Margin of Error</div>
+                  <div class="cochran-param-hint">Enter as decimal &mdash; 5% &rarr; 0.05</div>
+                </div>
+              </div>
+              <div class="cochran-param-right">
+                <div class="cochran-preset-row">
+                  <button class="cochran-preset" data-param="e" data-value="0.01">1%</button>
+                  <button class="cochran-preset active" data-param="e" data-value="0.05">5%</button>
+                  <button class="cochran-preset" data-param="e" data-value="0.1">10%</button>
+                </div>
+                <input id="paramE" class="cochran-input" type="number" step="0.001" min="0.001" max="1" value="0.05" placeholder="0 to 1">
+              </div>
+            </div>
+
+            <!-- N -->
+            <div class="cochran-param-row">
+              <div class="cochran-param-left">
+                <div class="cochran-param-symbol">N</div>
+                <div class="cochran-param-info">
+                  <div class="cochran-param-title">Population Size</div>
+                  <div class="cochran-param-hint">Optional &mdash; enables finite correction</div>
+                </div>
+              </div>
+              <div class="cochran-param-right cochran-n-right">
+                <div class="cochran-n-tabs">
+                  <button class="cochran-n-tab active" data-tab="manual">Manual</button>
+                  <button class="cochran-n-tab" data-tab="file">From File</button>
+                </div>
+
+                <div id="nTabManual" class="cochran-n-pane">
+                  <input id="paramN" class="cochran-input" type="number" min="1" step="1" placeholder="Leave blank to skip">
+                </div>
+
+                <div id="nTabFile" class="cochran-n-pane hidden">
+                  <input id="nFileInput" type="file" accept=".csv,.xlsx,.xls" hidden>
+                  <div id="nFileDrop" class="cochran-file-drop">
+                    <span class="cochran-file-drop-text">Drop file here or</span>
+                    <button class="btn" id="nFileBrowse" type="button">Browse</button>
+                  </div>
+                  <div id="nFileResult" class="cochran-file-result hidden">
+                    <span class="cochran-file-name" id="nFileName"></span>
+                    <span class="cochran-file-count">N = <strong id="nFileCount"></strong></span>
+                    <button class="cochran-file-clear" id="nFileClear" type="button">&times;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="cochran-calc-row">
+            <button id="calcBtn" class="btn primary cochran-calc-btn" type="button">Calculate</button>
+            <span id="calcMsg" class="subtext"></span>
+          </div>
+        </section>
+
+        <!-- Right: Result -->
+        <section class="card cochran-result-card" id="resultCard">
+          <div class="cochran-result-label">Required Sample Size</div>
+          <div class="cochran-result-numbers" id="resultNumbers">
+            <span class="cochran-result-dash">&mdash;</span>
+          </div>
+          <div class="cochran-result-sub" id="resultSub">Fill in parameters and click Calculate.</div>
+          <div class="cochran-divider"></div>
+          <div class="cochran-result-breakdown" id="resultBreakdown">
+            <div class="subtext" style="padding:8px 0">No result yet.</div>
+          </div>
+        </section>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='cochran.js') }}"></script>
+</body>
+</html>

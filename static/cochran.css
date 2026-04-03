@@ -1,0 +1,440 @@
+/* static/cochran.css */
+
+/* ── Formula Banner ── */
+.cochran-formula-card {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  padding: 20px 24px;
+}
+
+.cochran-formula-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.cochran-formula-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.cochran-formula-label {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.55;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cochran-formula {
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.cochran-formula-divider {
+  width: 1px;
+  height: 60px;
+  background: rgba(255,255,255,0.2);
+}
+
+/* Fraction */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 3px;
+}
+.frac .num {
+  border-bottom: 2px solid rgba(255,255,255,0.6);
+  padding: 0 6px 3px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.frac .den {
+  padding: 3px 6px 0;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+/* ── Main Layout ── */
+.cochran-main-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 14px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .cochran-main-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Params Card ── */
+.cochran-params-card {
+  padding: 18px;
+}
+
+.cochran-param-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 6px;
+}
+
+.cochran-param-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cochran-param-row:last-child {
+  border-bottom: none;
+}
+
+.cochran-param-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 0 0 220px;
+}
+
+.cochran-param-symbol {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: 900;
+  font-family: Georgia, serif;
+  flex-shrink: 0;
+}
+
+.cochran-param-title {
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.cochran-param-hint {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.cochran-param-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+/* Preset buttons */
+.cochran-preset-row {
+  display: flex;
+  gap: 6px;
+}
+
+.cochran-preset {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text);
+  transition: all 0.1s ease;
+  white-space: nowrap;
+}
+
+.cochran-preset:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.cochran-preset.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* Input */
+.cochran-input {
+  width: 130px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 9px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+  text-align: right;
+}
+
+.cochran-input:focus {
+  border-color: var(--primary);
+}
+
+/* ── N section ── */
+.cochran-n-right {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.cochran-n-tabs {
+  display: flex;
+  gap: 4px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px;
+  background: #f6f7f9;
+}
+
+.cochran-n-tab {
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 999px;
+  transition: all 0.15s;
+}
+
+.cochran-n-tab.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.cochran-n-pane {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.cochran-n-pane.hidden {
+  display: none;
+}
+
+/* File drop */
+.cochran-file-drop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: #fafbff;
+  cursor: default;
+}
+
+.cochran-file-drop.dragover {
+  border-color: var(--primary);
+  background: #f0f4ff;
+}
+
+.cochran-file-drop-text {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.cochran-file-result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 7px 10px;
+  background: #fff;
+  width: 100%;
+}
+
+.cochran-file-result.hidden {
+  display: none;
+}
+
+.cochran-file-name {
+  font-weight: 700;
+  font-size: 12px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 120px;
+}
+
+.cochran-file-count {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.cochran-file-count strong {
+  color: var(--text);
+  font-weight: 900;
+}
+
+.cochran-file-clear {
+  border: none;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--muted);
+  font-weight: 900;
+  padding: 0;
+  line-height: 1;
+}
+
+/* ── Calculate button ── */
+.cochran-calc-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.cochran-calc-btn {
+  padding: 11px 28px;
+  font-size: 14px;
+  font-weight: 800;
+  border-radius: 12px;
+}
+
+/* ── Result Card ── */
+.cochran-result-card {
+  padding: 20px;
+  border: 2px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: sticky;
+  top: 16px;
+}
+
+.cochran-result-card.has-result {
+  border-color: var(--primary);
+}
+
+.cochran-result-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 10px;
+}
+
+.cochran-result-numbers {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.cochran-result-dash {
+  font-size: 40px;
+  font-weight: 900;
+  color: #d1d5db;
+  font-family: Georgia, serif;
+}
+
+.cochran-result-n0 {
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -2px;
+  color: var(--text);
+  font-family: Georgia, serif;
+}
+
+.cochran-result-arrow {
+  font-size: 22px;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+.cochran-result-n {
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -2px;
+  color: var(--primary);
+  font-family: Georgia, serif;
+}
+
+.cochran-result-sub {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.cochran-divider {
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 14px;
+}
+
+/* Breakdown table */
+.cochran-result-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cochran-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.cochran-breakdown-row:nth-child(odd) {
+  background: #f6f7f9;
+}
+
+.cochran-breakdown-label {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.cochran-breakdown-value {
+  font-weight: 800;
+  color: var(--text);
+}
+
+.cochran-breakdown-row.highlight .cochran-breakdown-value {
+  color: var(--primary);
+  font-size: 13px;
+}
